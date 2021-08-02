@@ -1,0 +1,21 @@
+stl parts:
+	wOutlet
+	cOutlet
+	inlet
+	rohr
+	wirbelKammer
+	drossel
+	
+refinement Areas:
+	kammerRefinement
+	rohrRefinement
+	drosselRefinement
+	wOutRefinement
+	
+	level	lengths [mm]
+	0		5
+	1		2.5
+	2		1.25
+	3		0.625
+	4		0.3125
+	5		0.15625
