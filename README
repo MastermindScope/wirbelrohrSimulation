@@ -7,4 +7,5 @@
 	/Geometrie beinhaltet Skizzen des Wirbelrohres und in Zukunft auch stl geometrien
 	/Papers beinhaltet relevante papers, welche als Referenz herangezogen werden können
 	/Versuche enthält alle aus versuchen entstandenen Daten, Bilder...
+	/Simulationen enthält eine Datei mit generellen Infos über die Simulation und die aktuelle Simulation als .tar file
 	
