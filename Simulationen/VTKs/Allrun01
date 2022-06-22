@@ -1,0 +1,25 @@
+
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+#change all permissions to rwx, but not for the world!
+chmod -R 7770 ./
+runApplication reconstructParMesh -constant
+runApplication decomposePar -force
+
+runParallel mapFieldsPar -consistent -mapMethod 'direct' -parallel -sourceTime 'latestTime' '../vortexTube/'
+
+
+#if no worky try mapFields -mapMethods mapNearest
+
+# runApplication potentialFoam
+runParallel $(getApplication)
+
+runApplication reconstructPar
+
+# rm -r processor* 
+
+runApplication foamToVTK -ascii

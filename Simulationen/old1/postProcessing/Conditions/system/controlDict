@@ -1,0 +1,65 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     rhoCentralFoam; //rhoCentralFoam or rhoPimpleFoam are possible
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         1;
+
+deltaT          1e-07; // 1e-09
+
+writeControl    adjustableRunTime;
+
+writeInterval   0.001;
+
+cycleWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  7;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  yes;
+
+maxCo           1; // 0.2
+
+maxDeltaT       6e-07;
+
+functions
+{
+    #include "massflow_inlet"
+    #include "massflow_cOutlet"
+    #include "massflow_wOutlet"
+    #include "inlet_average"
+    #include "cOutlet_average"
+    #include "wOutlet_average"
+    //#include "residuals"
+}
+
+// ************************************************************************* //

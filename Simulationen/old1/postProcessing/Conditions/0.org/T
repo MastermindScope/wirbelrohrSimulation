@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 294;
+
+boundaryField
+{
+    "(drossel|rohr|box|wirbelKammer)"
+    {
+        type            zeroGradient;
+    }
+
+    "(inlet)"
+    {
+        type            totalTemperature;
+        gamma         	1.4;
+        phi             phi;
+        rho             rho; // none
+        psi             thermo:psi;
+        T0              uniform 294;
+        value           uniform 294;
+    }
+
+    "(wOutlet|cOutlet)"
+    {
+        type            inletOutlet;//zeroGradient
+		inletValue		293;
+    }
+}
+
+// ************************************************************************* //

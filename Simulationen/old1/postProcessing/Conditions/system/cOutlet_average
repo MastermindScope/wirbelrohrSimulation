@@ -1,0 +1,40 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+cOutlet_average
+     {
+    // Mandatory entries (unmodifiable)
+    type            surfaceFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+
+    // Mandatory entries (runtime modifiable)
+    fields          (U p T);
+    operation       average;
+    regionType      patch;
+    name            cOutlet;
+
+    
+
+    // Optional (inherited) entries
+    writeFields     false;
+    scalingFactor   1.0;
+    writePrecision  8;
+    writeToFile     true;
+    useUserTime     true;
+    region          region0;
+    enabled         true;
+    log             true;
+    timeStart       0;
+    executeControl  timeStep;
+    executeInterval 10;
+    writeControl    timeStep;
+    writeInterval   10;
+}
+
+
+// ************************************************************************* //

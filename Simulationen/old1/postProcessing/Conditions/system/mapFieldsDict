@@ -1,0 +1,23 @@
+FoamFile
+	{
+		version	8.0;
+		format	ascii;
+		class	dictionary;
+		object	mapFieldsDict;
+	}
+	
+patchMap
+	(
+		//rohr rohr
+		//inlet inlet
+		//drossel drossel
+		//wirbelKammer wirbelKammer
+	);
+	
+cuttingPatches
+	(
+		//cOutlet
+		//wOutlet
+	);
+	
+	directHitTol 1e-10;
