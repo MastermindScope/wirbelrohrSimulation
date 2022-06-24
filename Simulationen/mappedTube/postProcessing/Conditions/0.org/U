@@ -1,0 +1,48 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    "(inlet)"
+    {
+        rhoInlet        1.5;    // falls deaktiviert, dann Fehlermeldung in potentialFoam, Wert selbst spielt keine Rolle!
+	type		pressureInletOutletVelocity;
+	value		uniform (0 0 0);
+    }
+	
+    "(wOutlet|cOutlet)"
+    {
+        type            waveTransmissive;
+		field			U;
+        psi             thermo:psi;
+        gamma           1.4;
+        fieldInf        (0 0 0);
+        lInf            0.025;//1
+        value           uniform (0 0 0);
+    }
+
+    "(drossel|rohr|box|wirbelKammer)"
+    {
+        type            noSlip;
+    }
+}
+
+// ************************************************************************* //
