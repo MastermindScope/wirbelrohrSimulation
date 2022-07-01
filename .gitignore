@@ -1,2 +1,5 @@
 *.vtk
 Simulationen/VTKs/vtks.zip
+Series.*
+*.pvsm
+VTK*

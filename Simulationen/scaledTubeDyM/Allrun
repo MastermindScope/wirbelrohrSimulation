@@ -1,0 +1,69 @@
+
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+#change all permissions to rwx, but not for the world!
+chmod -R 7770 ./
+
+source Allclean
+rm -r *.tar
+tar cfv scotch_wavetransmissive_VT_20210421c.tar *
+
+#// Verschieben und Konvertieren Einheiten von Millimeter in Meter
+surfaceTransformPoints -scale '(0.001 0.00025 0.001)' constant/triSurface/rohr-mm.stl constant/triSurface/rohr.stl
+surfaceTransformPoints -scale '(0.001 0.00025 0.001)' constant/triSurface/drossel-mm.stl constant/triSurface/drossel_scaled.stl
+surfaceTransformPoints -translate '(0 0.002 0)' constant/triSurface/drossel_scaled.stl constant/triSurface/drossel.stl 
+surfaceTransformPoints -scale '(0.001 0.00025 0.001)' constant/triSurface/inlet-mm.stl constant/triSurface/inlet.stl
+surfaceTransformPoints -scale '(0.001 0.00025 0.001)' constant/triSurface/cOutlet-mm.stl constant/triSurface/cOutlet.stl
+surfaceTransformPoints -scale '(0.001 0.00025 0.001)' constant/triSurface/wOutlet-mm.stl constant/triSurface/wOutlet.stl
+surfaceTransformPoints -scale '(0.001 0.00025 0.001)' constant/triSurface/wirbelKammer-mm.stl constant/triSurface/wirbelKammer.stl
+
+#//Kantenerkennung
+runApplication surfaceFeatures
+
+#//Rechenraum definieren
+runApplication blockMesh
+
+# Decompose
+runApplication decomposePar
+mv log.decomposePar log.decomposePar.1
+runParallel snappyHexMesh -overwrite
+
+#runParallel mapFieldsPar -consistent -mapMethod 'mapNearest' -parallel -sourceTime 'latestTime' '../mappedTube/'
+#mv log.mapFieldsPar log.mapFieldsPar1
+
+
+runApplication reconstructParMesh -constant
+
+runParallel renumberMesh -overwrite
+# runApplication checkMesh -allGeometry -allTopology -constant -latestTime
+
+# Get rid of zero faced patches
+runApplication createPatch -overwrite 
+
+# Copy fields after meshing to avoid the generation of unnecessary patch fields
+cp -r 0.org 0 > /dev/null 2>&1
+runParallel patchSummary
+
+# mapFields -parallelSource -sourceTime 'latestTime' '../vortexTube/'
+
+
+# Decompose
+runApplication decomposePar -force 
+#runParallel mapFieldsPar -mapMethod 'direct' -parallel -sourceTime 'latestTime' '../mappedTube/'
+
+#if no worky try mapFields -mapMethods mapNearest
+
+# runApplication potentialFoam
+runParallel $(getApplication)
+
+runApplication sendmail vig4889@thi.de < simDone.txt
+
+runApplication reconstructPar
+
+# rm -r processor* 
+
+runApplication foamToVTK -ascii

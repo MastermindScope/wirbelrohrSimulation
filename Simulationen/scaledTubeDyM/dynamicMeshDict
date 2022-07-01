@@ -1,0 +1,37 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      dynamicMeshDict;
+}
+
+dynamicFvMesh		dynamicRefineFvMesh;
+
+dynamicRefineFvMeshCoeffs
+{
+	refineInterval	5;//This specifies how often mesh refinement should be performed. The interval is the number of outer iterations between mesh refinements. You can also think of this as the number of timesteps between refinements.
+	field			p;//The field specifies which field the dictionary shall use to determine mesh refinements. Fields can be scalar or vector. If a vector field is used, the dictionary will utilize the vector magnitude of that field. Only one field can be specified for mesh refinement.
+	
+	lowerRefineLevel	3e5;
+	upperRefineLevel	3e6;//These specify the limits of when to trigger mesh refinement or coarsening. The limits you specify here match values of the field variable you specified. Any field values below the lowerRefineLevel will trigger mesh refinement. Any field values above the upperRefineLevel will trigger mesh coarsening.
+	
+	unrefineLevel		3.5e5;//When the value of the desired quantity in a cell falls below this value, the cell will be coarsened. Note that the mesh cannot be coarser than the original mesh you supply.
+	
+	nBufferLayers		5;
+	
+	maxRefinement		3;
+	
+	maxCells			1000000;
+	
+	correctFluxes
+	(
+		(phi U)
+	
+	);
+
+	dumpLevel			true;
+
+
+}
